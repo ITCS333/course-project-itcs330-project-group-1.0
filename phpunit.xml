@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/php/bootstrap.php"
+         colors="true">
+
+    <testsuites>
+        <testsuite name="Auth">
+            <file>tests/php/AuthHandlerTest.php</file>
+        </testsuite>
+        <testsuite name="Admin">
+            <file>tests/php/ManageUsersTest.php</file>
+        </testsuite>
+        <testsuite name="Resources">
+            <file>tests/php/ResourcesApiTest.php</file>
+        </testsuite>
+        <testsuite name="Weekly">
+            <file>tests/php/WeeklyApiTest.php</file>
+        </testsuite>
+        <testsuite name="Assignments">
+            <file>tests/php/AssignmentsApiTest.php</file>
+        </testsuite>
+        <testsuite name="Discussion">
+            <file>tests/php/DiscussionApiTest.php</file>
+        </testsuite>
+    </testsuites>
+
+</phpunit>

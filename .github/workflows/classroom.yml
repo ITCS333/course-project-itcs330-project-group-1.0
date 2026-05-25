@@ -1,0 +1,367 @@
+name: Autograding Tests
+
+on:
+  - push
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install npm dependencies
+        run: npm install
+
+      # ============================================================
+      # TASK 1 — AUTH (login)
+      # ============================================================
+
+      - name: Task 1 — Login HTML
+        id: task1-html-login
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 1 — Login HTML
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/login" --forceExit
+          timeout: 30
+          max-score: 12
+
+      - name: Task 1 — Login JavaScript
+        id: task1-js-login
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 1 — Login JavaScript
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/js/login" --forceExit
+          timeout: 30
+          max-score: 14
+
+      - name: Task 1 — Auth PHP
+        id: task1-php-auth
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 1 — Auth PHP
+          setup-command: ''
+          command: vendor/bin/phpunit --configuration phpunit.xml --testsuite Auth
+          timeout: 60
+          max-score: 15
+
+      # ============================================================
+      # TASK 1 — ADMIN (manage users)
+      # ============================================================
+
+      - name: Task 1 — Manage Users HTML
+        id: task1-html-users
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 1 — Manage Users HTML
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/manage_users" --forceExit
+          timeout: 30
+          max-score: 30
+
+      - name: Task 1 — Manage Users JavaScript
+        id: task1-js-users
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 1 — Manage Users JavaScript
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/js/manage_users" --forceExit
+          timeout: 30
+          max-score: 26
+
+      - name: Task 1 — Manage Users PHP
+        id: task1-php-users
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 1 — Manage Users PHP
+          setup-command: ''
+          command: vendor/bin/phpunit --configuration phpunit.xml --testsuite Admin
+          timeout: 60
+          max-score: 20
+
+      # ============================================================
+      # TASK 2 — RESOURCES
+      # ============================================================
+
+      - name: Task 2 — Resources HTML (list)
+        id: task2-html-list
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 2 — Resources HTML (list)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/resources_list" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 2 — Resources HTML (details)
+        id: task2-html-details
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 2 — Resources HTML (details)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/resources_details" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 2 — Resources HTML (admin)
+        id: task2-html-admin
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 2 — Resources HTML (admin)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/resources_admin" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 2 — Resources JavaScript
+        id: task2-js
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 2 — Resources JavaScript
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/js/resources" --forceExit
+          timeout: 30
+          max-score: 10
+
+      - name: Task 2 — Resources PHP
+        id: task2-php
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 2 — Resources PHP
+          setup-command: ''
+          command: vendor/bin/phpunit --configuration phpunit.xml --testsuite Resources
+          timeout: 60
+          max-score: 26
+
+      # ============================================================
+      # TASK 3 — WEEKLY BREAKDOWN
+      # ============================================================
+
+      - name: Task 3 — Weekly HTML (list)
+        id: task3-html-list
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 3 — Weekly HTML (list)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/weekly_list" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 3 — Weekly HTML (details)
+        id: task3-html-details
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 3 — Weekly HTML (details)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/weekly_details" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 3 — Weekly HTML (admin)
+        id: task3-html-admin
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 3 — Weekly HTML (admin)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/weekly_admin" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 3 — Weekly JavaScript
+        id: task3-js
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 3 — Weekly JavaScript
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/js/weekly" --forceExit
+          timeout: 30
+          max-score: 10
+
+      - name: Task 3 — Weekly PHP
+        id: task3-php
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 3 — Weekly PHP
+          setup-command: ''
+          command: vendor/bin/phpunit --configuration phpunit.xml --testsuite Weekly
+          timeout: 60
+          max-score: 26
+
+      # ============================================================
+      # TASK 4 — ASSIGNMENTS
+      # ============================================================
+
+      - name: Task 4 — Assignments HTML (list)
+        id: task4-html-list
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 4 — Assignments HTML (list)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/assignments_list" --forceExit
+          timeout: 30
+          max-score: 8
+
+      - name: Task 4 — Assignments HTML (details)
+        id: task4-html-details
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 4 — Assignments HTML (details)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/assignments_details" --forceExit
+          timeout: 30
+          max-score: 18
+
+      - name: Task 4 — Assignments HTML (admin)
+        id: task4-html-admin
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 4 — Assignments HTML (admin)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/assignments_admin" --forceExit
+          timeout: 30
+          max-score: 27
+
+      - name: Task 4 — Assignments JavaScript
+        id: task4-js
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 4 — Assignments JavaScript
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/js/assignments" --forceExit
+          timeout: 30
+          max-score: 35
+
+      - name: Task 4 — Assignments PHP
+        id: task4-php
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 4 — Assignments PHP
+          setup-command: ''
+          command: vendor/bin/phpunit --configuration phpunit.xml --testsuite Assignments
+          timeout: 60
+          max-score: 26
+
+      # ============================================================
+      # TASK 5 — DISCUSSION BOARD
+      # ============================================================
+
+      - name: Task 5 — Discussion HTML (board)
+        id: task5-html-board
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 5 — Discussion HTML (board)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/discussion_board" --forceExit
+          timeout: 30
+          max-score: 15
+
+      - name: Task 5 — Discussion HTML (topic)
+        id: task5-html-topic
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 5 — Discussion HTML (topic)
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/html/discussion_topic" --forceExit
+          timeout: 30
+          max-score: 18
+
+      - name: Task 5 — Discussion JavaScript
+        id: task5-js
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 5 — Discussion JavaScript
+          setup-command: ''
+          command: npx jest --testPathPattern="tests/js/discussion" --forceExit
+          timeout: 30
+          max-score: 30
+
+      - name: Task 5 — Discussion PHP
+        id: task5-php
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Task 5 — Discussion PHP
+          setup-command: ''
+          command: vendor/bin/phpunit --configuration phpunit.xml --testsuite Discussion
+          timeout: 60
+          max-score: 25
+
+      # ============================================================
+      # AUTOGRADING REPORTER
+      # ============================================================
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TASK1-HTML-LOGIN_RESULTS:    "${{ steps.task1-html-login.outputs.result }}"
+          TASK1-JS-LOGIN_RESULTS:      "${{ steps.task1-js-login.outputs.result }}"
+          TASK1-PHP-AUTH_RESULTS:      "${{ steps.task1-php-auth.outputs.result }}"
+          TASK1-HTML-USERS_RESULTS:    "${{ steps.task1-html-users.outputs.result }}"
+          TASK1-JS-USERS_RESULTS:      "${{ steps.task1-js-users.outputs.result }}"
+          TASK1-PHP-USERS_RESULTS:     "${{ steps.task1-php-users.outputs.result }}"
+          TASK2-HTML-LIST_RESULTS:     "${{ steps.task2-html-list.outputs.result }}"
+          TASK2-HTML-DETAILS_RESULTS:  "${{ steps.task2-html-details.outputs.result }}"
+          TASK2-HTML-ADMIN_RESULTS:    "${{ steps.task2-html-admin.outputs.result }}"
+          TASK2-JS_RESULTS:            "${{ steps.task2-js.outputs.result }}"
+          TASK2-PHP_RESULTS:           "${{ steps.task2-php.outputs.result }}"
+          TASK3-HTML-LIST_RESULTS:     "${{ steps.task3-html-list.outputs.result }}"
+          TASK3-HTML-DETAILS_RESULTS:  "${{ steps.task3-html-details.outputs.result }}"
+          TASK3-HTML-ADMIN_RESULTS:    "${{ steps.task3-html-admin.outputs.result }}"
+          TASK3-JS_RESULTS:            "${{ steps.task3-js.outputs.result }}"
+          TASK3-PHP_RESULTS:           "${{ steps.task3-php.outputs.result }}"
+          TASK4-HTML-LIST_RESULTS:     "${{ steps.task4-html-list.outputs.result }}"
+          TASK4-HTML-DETAILS_RESULTS:  "${{ steps.task4-html-details.outputs.result }}"
+          TASK4-HTML-ADMIN_RESULTS:    "${{ steps.task4-html-admin.outputs.result }}"
+          TASK4-JS_RESULTS:            "${{ steps.task4-js.outputs.result }}"
+          TASK4-PHP_RESULTS:           "${{ steps.task4-php.outputs.result }}"
+          TASK5-HTML-BOARD_RESULTS:    "${{ steps.task5-html-board.outputs.result }}"
+          TASK5-HTML-TOPIC_RESULTS:    "${{ steps.task5-html-topic.outputs.result }}"
+          TASK5-JS_RESULTS:            "${{ steps.task5-js.outputs.result }}"
+          TASK5-PHP_RESULTS:           "${{ steps.task5-php.outputs.result }}"
+        with:
+          runners: >-
+            task1-html-login,
+            task1-js-login,
+            task1-php-auth,
+            task1-html-users,
+            task1-js-users,
+            task1-php-users,
+            task2-html-list,
+            task2-html-details,
+            task2-html-admin,
+            task2-js,
+            task2-php,
+            task3-html-list,
+            task3-html-details,
+            task3-html-admin,
+            task3-js,
+            task3-php,
+            task4-html-list,
+            task4-html-details,
+            task4-html-admin,
+            task4-js,
+            task4-php,
+            task5-html-board,
+            task5-html-topic,
+            task5-js,
+            task5-php

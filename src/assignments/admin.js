@@ -1,0 +1,168 @@
+/*
+  Requirement: Make the "Manage Assignments" page interactive.
+
+  Instructions:
+  1. This file is already linked to `admin.html` via:
+         <script src="admin.js" defer></script>
+
+  2. In `admin.html`:
+     - The form has id="assignment-form".
+     - The submit button has id="add-assignment".
+     - The <tbody> has id="assignments-tbody".
+     - Columns rendered per row:
+       Title | Due Date | Description | Actions.
+
+  3. Implement the TODOs below.
+
+  API base URL: ./api/index.php
+  All requests and responses use JSON.
+  Successful list response shape: { success: true, data: [ ...assignment objects ] }
+  Each assignment object shape:
+    {
+      id:          number,   // integer primary key from the assignments table
+      title:       string,
+      due_date:    string,   // "YYYY-MM-DD" — matches the SQL column name
+      description: string,
+      files:       string[]  // decoded array of URL strings
+    }
+*/
+
+// --- Global Data Store ---
+// Holds the assignments currently displayed in the table.
+let assignments = [];
+
+// --- Element Selections ---
+// TODO: Select the assignment form by id 'assignment-form'.
+
+// TODO: Select the assignments table body by id 'assignments-tbody'.
+
+// --- Functions ---
+
+/**
+ * TODO: Implement createAssignmentRow.
+ *
+ * Parameters:
+ *   assignment — one assignment object with shape:
+ *     { id, title, due_date, description, files }
+ *
+ * Returns a <tr> element with four <td>s:
+ *   1. title
+ *   2. due_date   (the "YYYY-MM-DD" string — use due_date, not dueDate)
+ *   3. description
+ *   4. Actions — two buttons:
+ *        <button class="edit-btn"   data-id="{id}">Edit</button>
+ *        <button class="delete-btn" data-id="{id}">Delete</button>
+ *      The data-id holds the integer primary key from the assignments table.
+ */
+function createAssignmentRow(assignment) {
+  // ... your implementation here ...
+}
+
+/**
+ * TODO: Implement renderTable.
+ *
+ * It should:
+ * 1. Clear the assignments table body (set innerHTML to "").
+ * 2. Loop through the global `assignments` array.
+ * 3. For each assignment, call createAssignmentRow(assignment) and
+ *    append the <tr> to the table body.
+ */
+function renderTable() {
+  // ... your implementation here ...
+}
+
+/**
+ * TODO: Implement handleAddAssignment (async).
+ *
+ * This is the event handler for the form's 'submit' event.
+ * It should:
+ * 1. Call event.preventDefault().
+ * 2. Read values from:
+ *      - #assignment-title       → title (string)
+ *      - #assignment-due-date    → due_date (string, "YYYY-MM-DD")
+ *      - #assignment-description → description (string)
+ *      - #assignment-files       → split by newlines (\n) and filter
+ *                                  empty strings to produce a files array.
+ * 3. Check if the submit button (#add-assignment) has a data-edit-id
+ *    attribute.
+ *    - If it does, call handleUpdateAssignment() with that id and the
+ *      field values.
+ *    - If it does not, send a POST to './api/index.php' with the body:
+ *        { title, due_date, description, files }
+ *      On success (result.success === true):
+ *        - Add the new assignment (with the id from result.id) to the
+ *          global `assignments` array.
+ *        - Call renderTable().
+ *        - Reset the form.
+ */
+async function handleAddAssignment(event) {
+  // ... your implementation here ...
+}
+
+/**
+ * TODO: Implement handleUpdateAssignment (async).
+ *
+ * Parameters:
+ *   id     — the integer primary key of the assignment being edited.
+ *   fields — object with { title, due_date, description, files }.
+ *
+ * It should:
+ * 1. Send a PUT to './api/index.php' with the body:
+ *      { id, title, due_date, description, files }
+ * 2. On success:
+ *    - Update the matching entry in the global `assignments` array.
+ *    - Call renderTable().
+ *    - Reset the form.
+ *    - Restore the submit button text to "Add Assignment" and remove
+ *      its data-edit-id attribute.
+ */
+async function handleUpdateAssignment(id, fields) {
+  // ... your implementation here ...
+}
+
+/**
+ * TODO: Implement handleTableClick (async).
+ *
+ * This is a delegated click listener on the assignments table body.
+ * It should:
+ * 1. If event.target has class "delete-btn":
+ *    a. Read the integer id from event.target.dataset.id.
+ *    b. Send a DELETE to './api/index.php?id=<id>'.
+ *    c. On success, remove the assignment from the global `assignments`
+ *       array and call renderTable().
+ *
+ * 2. If event.target has class "edit-btn":
+ *    a. Read the integer id from event.target.dataset.id.
+ *    b. Find the matching assignment in the global `assignments` array.
+ *    c. Populate the form fields:
+ *         #assignment-title       ← assignment.title
+ *         #assignment-due-date    ← assignment.due_date
+ *         #assignment-description ← assignment.description
+ *         #assignment-files       ← assignment.files joined with newlines (\n)
+ *    d. Change the submit button (#add-assignment) text to
+ *       "Update Assignment" and set its data-edit-id attribute to the
+ *       assignment's id.
+ */
+async function handleTableClick(event) {
+  // ... your implementation here ...
+}
+
+/**
+ * TODO: Implement loadAndInitialize (async).
+ *
+ * It should:
+ * 1. Send a GET to './api/index.php'.
+ *    Response shape: { success: true, data: [ ...assignment objects ] }
+ * 2. Store the data array in the global `assignments` variable.
+ * 3. Call renderTable() to populate the table.
+ * 4. Attach the 'submit' event listener to the assignment form
+ *    (calls handleAddAssignment).
+ * 5. Attach a 'click' event listener to the assignments table body
+ *    (calls handleTableClick — event delegation for edit and delete).
+ */
+async function loadAndInitialize() {
+  // ... your implementation here ...
+}
+
+// --- Initial Page Load ---
+loadAndInitialize();
