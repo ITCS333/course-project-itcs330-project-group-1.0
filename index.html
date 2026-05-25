@@ -1,1 +1,81 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITCS333 Course Website</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+</head>
+<body>
+    <header class="container">
+        <h1>ITCS333 — Internet Software Development</h1>
+        <p>University of Bahrain</p>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>Course Sections</h2>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+
+                <article>
+                    <h3>📚 Resources</h3>
+                    <p>Course materials and links.</p>
+                    <a href="src/resources/list.html" role="button">View Resources</a>
+                </article>
+
+                <article>
+                    <h3>📅 Weekly Breakdown</h3>
+                    <p>Week-by-week course plan.</p>
+                    <a href="src/weekly/list.html" role="button">View Weekly</a>
+                </article>
+
+                <article>
+                    <h3>📝 Assignments</h3>
+                    <p>Course assignments and due dates.</p>
+                    <a href="src/assignments/list.html" role="button">View Assignments</a>
+                </article>
+
+                <article>
+                    <h3>💬 Discussion</h3>
+                    <p>General discussion board.</p>
+                    <a href="src/discussion/board.html" role="button">Open Board</a>
+                </article>
+
+                <article>
+                    <h3>🔐 Login</h3>
+                    <p>Admin and student login.</p>
+                    <a href="src/auth/login.html" role="button">Login</a>
+                </article>
+
+            </div>
+        </section>
+
+        <section>
+            <h2>Admin Panel</h2>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+
+                <article>
+                    <h3>👥 Manage Users</h3>
+                    <a href="src/admin/manage_users.html" role="button" class="secondary">Manage Users</a>
+                </article>
+
+                <article>
+                    <h3>📚 Manage Resources</h3>
+                    <a href="src/resources/admin.html" role="button" class="secondary">Manage Resources</a>
+                </article>
+
+                <article>
+                    <h3>📅 Manage Weekly</h3>
+                    <a href="src/weekly/admin.html" role="button" class="secondary">Manage Weekly</a>
+                </article>
+
+                <article>
+                    <h3>📝 Manage Assignments</h3>
+                    <a href="src/assignments/admin.html" role="button" class="secondary">Manage Assignments</a>
+                </article>
+
+            </div>
+        </section>
+    </main>
+</body>
+</html>
