@@ -114,9 +114,13 @@ function renderTable(userArray) {
 async function handleChangePassword(event) {
   event.preventDefault();
 
-  const currentPassword = document.getElementById('current-password').value;
-  const newPassword     = document.getElementById('new-password').value;
-  const confirmPassword = document.getElementById('confirm-password').value;
+  const currentPasswordInput = document.getElementById('current-password');
+  const newPasswordInput     = document.getElementById('new-password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+
+  const currentPassword = currentPasswordInput.value;
+  const newPassword     = newPasswordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
 
   if (newPassword !== confirmPassword) {
     alert('Passwords do not match.');
@@ -128,6 +132,11 @@ async function handleChangePassword(event) {
     return;
   }
 
+  // Clear fields before fetch (satisfies JS-13)
+  currentPasswordInput.value = '';
+  newPasswordInput.value     = '';
+  confirmPasswordInput.value = '';
+
   const response = await fetch('../api/index.php?action=change_password', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -137,9 +146,6 @@ async function handleChangePassword(event) {
 
   if (result.success) {
     alert('Password updated successfully!');
-    document.getElementById('current-password').value = '';
-    document.getElementById('new-password').value     = '';
-    document.getElementById('confirm-password').value = '';
   } else {
     alert(result.message);
   }
@@ -304,8 +310,9 @@ function handleSort(event) {
 
   if (!prop) return;
 
-  const currentDir = event.currentTarget.dataset.sortDir || 'asc';
-  const newDir     = currentDir === 'asc' ? 'desc' : 'asc';
+  // No data-sort-dir means no sort has happened yet — first click = 'asc'
+  const currentDir = event.currentTarget.dataset.sortDir;
+  const newDir     = (!currentDir || currentDir === 'desc') ? 'asc' : 'desc';
   event.currentTarget.dataset.sortDir = newDir;
 
   users.sort((a, b) => {

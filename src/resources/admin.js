@@ -78,9 +78,10 @@ function createResourceRow(resource) {
  * 3. For each resource, call `createResourceRow()` and
  *    append the returned <tr> to the table body.
  */
-function renderTable() {
+function renderTable(resourceArray) {
+  const arr = resourceArray !== undefined ? resourceArray : resources;
   resourcesTbody.innerHTML = '';
-  resources.forEach(resource => {
+  arr.forEach(resource => {
     resourcesTbody.appendChild(createResourceRow(resource));
   });
 }
