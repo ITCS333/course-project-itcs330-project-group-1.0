@@ -10,13 +10,17 @@
 <html lang="en">
 <head>
     <!-- TODO: Add the <meta> tag for character encoding (UTF-8). -->
+    <meta charset="UTF-8">
 
     <!-- TODO: Add the responsive viewport <meta> tag
          (width=device-width, initial-scale=1.0). -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- TODO: Add a <title>, e.g., "Manage Assignments". -->
+    <title>Manage Assignments</title>
 
     <!-- TODO: Link to your CSS framework or stylesheet. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
     <!-- Required: link admin.js with defer. -->
     <script src="admin.js" defer></script>
@@ -24,35 +28,50 @@
 <body>
 
     <!-- TODO: Create a <header> containing an <h1> "Manage Assignments". -->
+    <header class="container">
+        <h1>Manage Assignments</h1>
+    </header>
 
     <!-- TODO: Create the <main> content area. -->
+    <main class="container">
 
         <!-- ============================================================
              Section 1: Add / Edit Assignment Form
              ============================================================ -->
         <!-- TODO: Create a <section> for the form. -->
+        <section>
 
             <!-- TODO: Add a sub-heading <h2> "Add a New Assignment". -->
+            <h2>Add a New Assignment</h2>
 
             <!-- TODO: Create a <form id="assignment-form"> (action can be "#").
                  The id is required by admin.js. -->
+            <form id="assignment-form" action="#">
 
                 <!-- TODO: Use a <fieldset> to group the form controls. -->
+                <fieldset>
                     <!-- TODO: Add a <legend>, e.g., "Assignment Details". -->
+                    <legend>Assignment Details</legend>
 
                     <!-- TODO: Add a <label> and <input> for the assignment title.
                          - label for="assignment-title"
                          - input id="assignment-title", type="text", required -->
+                    <label for="assignment-title">Title</label>
+                    <input type="text" id="assignment-title" required>
 
                     <!-- TODO: Add a <label> and <textarea> for the description.
                          - label for="assignment-description"
                          - textarea id="assignment-description", rows="5", required
                          - Maps to the description column in the assignments table. -->
+                    <label for="assignment-description">Description</label>
+                    <textarea id="assignment-description" rows="5" required></textarea>
 
                     <!-- TODO: Add a <label> and <input> for the due date.
                          - label for="assignment-due-date"
                          - input id="assignment-due-date", type="date", required
                          - Maps to the due_date column in the assignments table. -->
+                    <label for="assignment-due-date">Due Date</label>
+                    <input type="date" id="assignment-due-date" required>
 
                     <!-- TODO: Add a <label> and <textarea> for attached file URLs
                          (one URL per line).
@@ -61,6 +80,8 @@
                          - Maps to the files column (JSON array) in the
                            assignments table. admin.js will split the textarea
                            value on newlines and send it as an array. -->
+                    <label for="assignment-files">Attached File URLs (one per line)</label>
+                    <textarea id="assignment-files" rows="3"></textarea>
 
                     <!-- TODO: Add a submit <button>.
                          - id="add-assignment", type="submit"
@@ -68,8 +89,14 @@
                          - When the form is in edit mode, admin.js will
                            change the button text to "Update Assignment" and
                            store the id being edited in a data attribute. -->
+                    <button type="submit" id="add-assignment">Add Assignment</button>
+                </fieldset>
                 <!-- End of <fieldset> -->
+
+            </form>
             <!-- End of <form> -->
+
+        </section>
         <!-- End of form <section> -->
 
 
@@ -78,10 +105,13 @@
              ============================================================ -->
         <!-- TODO: Create a <section> to display the current list of
              assignments. -->
+        <section>
 
             <!-- TODO: Add a sub-heading <h2> "Current Assignments". -->
+            <h2>Current Assignments</h2>
 
             <!-- TODO: Create a <table id="assignments-table">. -->
+            <table id="assignments-table">
 
                 <!-- TODO: Create a <thead> with a <tr> containing <th>
                      elements:
@@ -91,11 +121,20 @@
                      - "Actions"
                      The columns must match the data rendered by
                      admin.js createAssignmentRow(). -->
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Due Date</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
                 <!-- TODO: Create a <tbody id="assignments-tbody">.
                      The id is required by admin.js so it can inject
                      <tr> rows. admin.js will clear and repopulate this
                      tbody whenever the data changes. -->
+                <tbody id="assignments-tbody">
 
                 <!-- admin.js will inject rows here. Each row follows
                      this structure (do NOT hardcode real data):
@@ -113,9 +152,15 @@
                 The data-id attribute holds the integer id from the
                 assignments table (primary key). -->
 
+                </tbody>
+            </table>
             <!-- End of <table> -->
+
+        </section>
         <!-- End of list <section> -->
 
+    </main>
     <!-- End of <main> -->
+
 </body>
 </html>
