@@ -10,38 +10,56 @@
 <html lang="en">
 <head>
     <!-- TODO: Add meta tags for charset and viewport. -->
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- TODO: Add a title. You can make it dynamic later, but for now, use "Resource Details". -->
+    <title>Resource Details</title>
 
     <!-- TODO: Link to your CSS framework or stylesheet. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
     <!-- TODO: Link this script file:
          <script src="details.js" defer></script> -->
+    <script src="details.js" defer></script>
 </head>
 <body>
+
     <!-- TODO: Create a 'header' with a main heading ('h1').
          Add id="resource-title" to the <h1>. This id is required by details.js. -->
+    <header class="container">
+        <h1 id="resource-title"></h1>
+    </header>
 
     <!-- TODO: Create the 'main' content area. -->
+    <main class="container">
 
         <!-- Section 1: Resource Information -->
         <!-- TODO: Use an 'article' to display the main resource information. -->
+        <article>
             <!-- TODO: Add a paragraph ('p') for the resource description.
                  Add id="resource-description" to this <p>. This id is required by details.js. -->
+            <p id="resource-description"></p>
+
             <!-- TODO: Add an anchor tag ('a') that links to the actual resource URL.
                  - Add id="resource-link" to this <a>. This id is required by details.js.
                  - Text should be "Access Resource Material".
                  - Add target="_blank" to open it in a new tab. -->
+            <a id="resource-link" href="#" target="_blank">Access Resource Material</a>
+        </article>
         <!-- End of article. -->
 
         <!-- Section 2: Discussion Forum -->
         <!-- TODO: Create a 'section' for the discussion, with an 'id' of "discussion-forum". -->
+        <section id="discussion-forum">
             <!-- TODO: Add a sub-heading ('h2') "Discussion". -->
+            <h2>Discussion</h2>
 
             <!-- Subsection 2.1: Existing Comments -->
             <!-- TODO: Add a <div> for the list of comments.
                  Add id="comment-list" to this <div>. This id is required by details.js.
                  Comments will be injected here dynamically by details.js. -->
+            <div id="comment-list">
 
                 <!-- Each comment follows this structure: -->
                 <!-- TODO: Use an 'article' for each comment. -->
@@ -50,26 +68,39 @@
                          (e.g., "Posted by: Ali Hassan"). -->
                 <!-- End of comment article. -->
 
+            </div>
             <!-- End of comment list div. -->
 
             <!-- Subsection 2.2: Add a Comment Form -->
             <!-- TODO: Create a 'form' for users to post new comments.
                  Add id="comment-form" to this <form>. This id is required by details.js.
                  Action can be '#'. -->
+            <form id="comment-form" action="#">
                 <!-- TODO: Use a 'fieldset' to group the controls. -->
+                <fieldset>
                     <!-- TODO: Add a 'legend', e.g., "Leave a Comment". -->
+                    <legend>Leave a Comment</legend>
 
                     <!-- TODO: Add a 'label' and 'textarea' for the comment box.
                          - label 'for': "new-comment"
                          - textarea 'id': "new-comment", required
                          This id is required by details.js. -->
-                    
+                    <label for="new-comment">Your Comment</label>
+                    <textarea id="new-comment" rows="4" required></textarea>
+
                     <!-- TODO: Add a 'button' to submit the comment.
                          - type="submit", Text: "Post Comment" -->
+                    <button type="submit">Post Comment</button>
+                </fieldset>
                 <!-- End of fieldset. -->
+            </form>
             <!-- End of form. -->
+
+        </section>
         <!-- End of discussion section. -->
 
+    </main>
     <!-- End of main. -->
+
 </body>
 </html>

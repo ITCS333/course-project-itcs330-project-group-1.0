@@ -17,8 +17,10 @@ let resources = [];
 
 // --- Element Selections ---
 // TODO: Select the resource form ('#resource-form').
+const resourceForm = document.getElementById('resource-form');
 
 // TODO: Select the resources table body ('#resources-tbody').
+const resourcesTbody = document.getElementById('resources-tbody');
 
 // --- Functions ---
 
@@ -34,7 +36,38 @@ let resources = [];
  *    - A "Delete" button with class="delete-btn" and data-id="${id}".
  */
 function createResourceRow(resource) {
-  // ... your implementation here ...
+  const tr = document.createElement('tr');
+
+  const titleTd = document.createElement('td');
+  titleTd.textContent = resource.title;
+
+  const descTd = document.createElement('td');
+  descTd.textContent = resource.description;
+
+  const linkTd = document.createElement('td');
+  linkTd.textContent = resource.link;
+
+  const actionsTd = document.createElement('td');
+
+  const editBtn = document.createElement('button');
+  editBtn.className = 'edit-btn';
+  editBtn.dataset.id = resource.id;
+  editBtn.textContent = 'Edit';
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'delete-btn';
+  deleteBtn.dataset.id = resource.id;
+  deleteBtn.textContent = 'Delete';
+
+  actionsTd.appendChild(editBtn);
+  actionsTd.appendChild(deleteBtn);
+
+  tr.appendChild(titleTd);
+  tr.appendChild(descTd);
+  tr.appendChild(linkTd);
+  tr.appendChild(actionsTd);
+
+  return tr;
 }
 
 /**
@@ -46,7 +79,10 @@ function createResourceRow(resource) {
  *    append the returned <tr> to the table body.
  */
 function renderTable() {
-  // ... your implementation here ...
+  resourcesTbody.innerHTML = '';
+  resources.forEach(resource => {
+    resourcesTbody.appendChild(createResourceRow(resource));
+  });
 }
 
 /**
@@ -68,8 +104,51 @@ function renderTable() {
  * 5. Call `renderTable()` to refresh the list.
  * 6. Reset the form.
  */
-function handleAddResource(event) {
-  // ... your implementation here ...
+async function handleAddResource(event) {
+  event.preventDefault();
+
+  const title       = document.getElementById('resource-title').value;
+  const description = document.getElementById('resource-description').value;
+  const link        = document.getElementById('resource-link').value;
+
+  const submitBtn = document.getElementById('add-resource');
+
+  // If in edit mode, delegate to the edit handler
+  if (submitBtn.dataset.editId) {
+    const id = parseInt(submitBtn.dataset.editId, 10);
+
+    const response = await fetch('./api/index.php', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, title, description, link }),
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      const index = resources.findIndex(r => r.id === id);
+      if (index !== -1) {
+        resources[index] = { ...resources[index], title, description, link };
+      }
+      renderTable();
+      resourceForm.reset();
+      submitBtn.textContent = 'Add Resource';
+      delete submitBtn.dataset.editId;
+    }
+    return;
+  }
+
+  const response = await fetch('./api/index.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, description, link }),
+  });
+  const result = await response.json();
+
+  if (result.success) {
+    resources.push({ id: result.data.id, title, description, link });
+    renderTable();
+    resourceForm.reset();
+  }
 }
 
 /**
@@ -103,8 +182,32 @@ function handleAddResource(event) {
  * 7. Call `renderTable()` and reset the form back to "Add" mode,
  *    restoring the submit button text to "Add Resource".
  */
-function handleTableClick(event) {
-  // ... your implementation here ...
+async function handleTableClick(event) {
+  if (event.target.classList.contains('delete-btn')) {
+    const id = parseInt(event.target.dataset.id, 10);
+
+    const response = await fetch(`./api/index.php?id=${id}`, { method: 'DELETE' });
+    const result   = await response.json();
+
+    if (result.success) {
+      resources = resources.filter(r => r.id !== id);
+      renderTable();
+    }
+  }
+
+  if (event.target.classList.contains('edit-btn')) {
+    const id       = parseInt(event.target.dataset.id, 10);
+    const resource = resources.find(r => r.id === id);
+    if (!resource) return;
+
+    document.getElementById('resource-title').value       = resource.title;
+    document.getElementById('resource-description').value = resource.description;
+    document.getElementById('resource-link').value        = resource.link;
+
+    const submitBtn = document.getElementById('add-resource');
+    submitBtn.textContent   = 'Update Resource';
+    submitBtn.dataset.editId = id;
+  }
 }
 
 /**
@@ -122,7 +225,16 @@ function handleTableClick(event) {
  *    calling `handleTableClick`.
  */
 async function loadAndInitialize() {
-  // ... your implementation here ...
+  const response = await fetch('./api/index.php');
+  const result   = await response.json();
+
+  if (result.success) {
+    resources = result.data;
+    renderTable();
+  }
+
+  resourceForm.addEventListener('submit', handleAddResource);
+  resourcesTbody.addEventListener('click', handleTableClick);
 }
 
 // --- Initial Page Load ---
