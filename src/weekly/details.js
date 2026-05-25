@@ -46,6 +46,13 @@ let currentComments = [];
 // TODO: Select each element by its id:
 //   weekTitle, weekStartDate, weekDescription,
 //   weekLinksList, commentList, commentForm, newCommentInput.
+const weekTitle       = document.getElementById('week-title');
+const weekStartDate   = document.getElementById('week-start-date');
+const weekDescription = document.getElementById('week-description');
+const weekLinksList   = document.getElementById('week-links-list');
+const commentList     = document.getElementById('comment-list');
+const commentForm     = document.getElementById('comment-form');
+const newCommentInput = document.getElementById('new-comment');
 
 // --- Functions ---
 
@@ -59,7 +66,8 @@ let currentComments = [];
  *    the integer primary key of the week).
  */
 function getWeekIdFromURL() {
-  // ... your implementation here ...
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
 }
 
 /**
@@ -79,7 +87,20 @@ function getWeekIdFromURL() {
  *    (week.links is already a decoded string array from the API.)
  */
 function renderWeekDetails(week) {
-  // ... your implementation here ...
+  weekTitle.textContent       = week.title;
+  weekStartDate.textContent   = `Starts on: ${week.start_date}`;
+  weekDescription.textContent = week.description;
+
+  weekLinksList.innerHTML = '';
+  (week.links || []).forEach(url => {
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href        = url;
+    a.textContent = url;
+    a.target      = '_blank';
+    li.appendChild(a);
+    weekLinksList.appendChild(li);
+  });
 }
 
 /**
@@ -96,7 +117,18 @@ function renderWeekDetails(week) {
  *   </article>
  */
 function createCommentArticle(comment) {
-  // ... your implementation here ...
+  const article = document.createElement('article');
+
+  const p = document.createElement('p');
+  p.textContent = comment.text;
+
+  const footer = document.createElement('footer');
+  footer.textContent = `Posted by: ${comment.author}`;
+
+  article.appendChild(p);
+  article.appendChild(footer);
+
+  return article;
 }
 
 /**
@@ -109,7 +141,10 @@ function createCommentArticle(comment) {
  *    append the result to commentList.
  */
 function renderComments() {
-  // ... your implementation here ...
+  commentList.innerHTML = '';
+  currentComments.forEach(comment => {
+    commentList.appendChild(createCommentArticle(comment));
+  });
 }
 
 /**
@@ -134,7 +169,27 @@ function renderComments() {
  *    - Clear newCommentInput.
  */
 async function handleAddComment(event) {
-  // ... your implementation here ...
+  event.preventDefault();
+
+  const commentText = newCommentInput.value.trim();
+  if (!commentText) return;
+
+  const response = await fetch('./api/index.php?action=comment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      week_id: parseInt(currentWeekId, 10),
+      author:  'Student',
+      text:    commentText,
+    }),
+  });
+  const result = await response.json();
+
+  if (result.success) {
+    currentComments.push(result.data);
+    renderComments();
+    newCommentInput.value = '';
+  }
 }
 
 /**
@@ -162,7 +217,27 @@ async function handleAddComment(event) {
  *    - Set weekTitle.textContent = "Week not found."
  */
 async function initializePage() {
-  // ... your implementation here ...
+  currentWeekId = getWeekIdFromURL();
+
+  if (!currentWeekId) {
+    weekTitle.textContent = 'Week not found.';
+    return;
+  }
+
+  const [weekRes, commentsRes] = await Promise.all([
+    fetch(`./api/index.php?id=${currentWeekId}`).then(r => r.json()),
+    fetch(`./api/index.php?action=comments&week_id=${currentWeekId}`).then(r => r.json()),
+  ]);
+
+  currentComments = (commentsRes.success && commentsRes.data) ? commentsRes.data : [];
+
+  if (weekRes.success && weekRes.data) {
+    renderWeekDetails(weekRes.data);
+    renderComments();
+    commentForm.addEventListener('submit', handleAddComment);
+  } else {
+    weekTitle.textContent = 'Week not found.';
+  }
 }
 
 // --- Initial Page Load ---
